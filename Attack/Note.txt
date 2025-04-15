@@ -1,0 +1,13 @@
+Attack:
+	controll with arrow keys. laser doesnt end the game, it just keeps track. 
+	laser has a length too, which can be adjusted.
+
+Defense:
+	Has FSMs, A* and prediction algorithms for path planning in general
+	Always runs away from attacking car
+	
+To do:
+	Game: End the game when laser hits
+	
+	Attack: make autonomous
+	Defense: improve hiding and staying out of line of sight

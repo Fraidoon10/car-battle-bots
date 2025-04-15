@@ -1,0 +1,15 @@
+
+Game Mode:
+- Player controls the Blue car (HidingCar) with arrow keys.
+- Goal is to evade the AI AttackerCar (Red).
+- AI AttackerCar uses A* pathfinding to chase the Player.
+- A laser visualizes the Attacker's Line of Sight (LOS).
+- Game ends when the Attacker has a clear LOS to the Player within laser range.
+
+Potential Improvements:
+- Make attacker AI more sophisticated (e.g., use prediction, smarter pathing).
+- Add scoring based on survival time.
+- Improve game over screen/restart functionality.
+- Add sound effects.
+
+# --- END OF FILE Note.txt ---
