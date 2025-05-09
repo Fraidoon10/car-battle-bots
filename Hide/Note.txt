@@ -12,4 +12,3 @@ Potential Improvements:
 - Improve game over screen/restart functionality.
 - Add sound effects.
 
-# --- END OF FILE Note.txt ---
