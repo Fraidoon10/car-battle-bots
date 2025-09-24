@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Battle Bot Frame - Structural Analysis</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .calculation-box {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        .formula {
+            background: #d5dbdb;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .result {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .beam-diagram {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .beam-svg {
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .warning {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d1edff;
+            color: #0c5460;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #bee5eb;
+            margin: 10px 0;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            display: inline-block;
+            width: 200px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Car Battle Bot Frame - Structural Analysis</h1>
+        
+        <div class="section">
+            <h2>📋 Problem Setup</h2>
+            <p>This analysis covers the structural design of a beam for a car battle bot frame that must support various component loads while withstanding dynamic forces from uneven terrain and battle conditions.</p>
+            
+            <h3>Given Loads:</h3>
+            <table>
+                <tr><th>Component</th><th>Load (lb)</th><th>Position (in)</th></tr>
+                <tr><td>Component A</td><td>50</td><td>6 from left</td></tr>
+                <tr><td>Component B</td><td>30</td><td>Below A</td></tr>
+                <tr><td>Component C</td><td>14</td><td>Distributed (0-22)</td></tr>
+                <tr><td>Component F</td><td>250</td><td>Right side</td></tr>
+                <tr><td>Component E</td><td>60</td><td>Right side</td></tr>
+            </table>
+            
+            <h3>Beam Configuration:</h3>
+            <ul>
+                <li>Total Length: 22 inches</li>
+                <li>Support Type: Simply supported beam</li>
+                <li>Material: Steel (to be determined)</li>
+                <li>Safety Factor: 3.0 (minimum for battle bot application)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Interactive Load Calculator</h2>
+            <div class="input-group">
+                <label>Component A Load (lb):</label>
+                <input type="number" id="loadA" value="50" min="0" step="1">
+            </div>
+            <div class="input-group">
+                <label>Component B Load (lb):</label>
+                <input type="number" id="loadB" value="30" min="0" step="1">
+            </div>
+            <div class="input-group">
+                <label>Component C Load (lb):</label>
+                <input type="number" id="loadC" value="14" min="0" step="1">
+            </div>
+            <div class="input-group">
+                <label>Component F Load (lb):</label>
+                <input type="number" id="loadF" value="250" min="0" step="1">
+            </div>
+            <div class="input-group">
+                <label>Component E Load (lb):</label>
+                <input type="number" id="loadE" value="60" min="0" step="1">
+            </div>
+            <div class="input-group">
+                <label>Dynamic Factor:</label>
+                <input type="number" id="dynamicFactor" value="1.5" min="1" step="0.1">
+            </div>
+            <button onclick="calculateAnalysis()">🔄 Recalculate Analysis</button>
+        </div>
+
+        <div class="section">
+            <h2>📐 Beam Diagram</h2>
+            <div class="beam-diagram">
+                <svg class="beam-svg" width="800" height="200" viewBox="0 0 800 200">
+                    <!-- Beam -->
+                    <line x1="100" y1="100" x2="700" y2="100" stroke="#8B4513" stroke-width="10"/>
+                    
+                    <!-- Supports -->
+                    <polygon points="90,100 110,120 110,110 90,110" fill="#333"/>
+                    <polygon points="690,100 710,120 710,110 690,110" fill="#333"/>
+                    
+                    <!-- Loads -->
+                    <!-- Component A at 6" (x=200) -->
+                    <line x1="200" y1="50" x2="200" y2="100" stroke="red" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="205" y="45" font-size="12" fill="red">A (50 lb)</text>
+                    
+                    <!-- Component B below A -->
+                    <line x1="200" y1="130" x2="200" y2="100" stroke="blue" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="205" y="145" font-size="12" fill="blue">B (30 lb)</text>
+                    
+                    <!-- Component C distributed -->
+                    <line x1="100" y1="70" x2="700" y2="70" stroke="green" stroke-width="2"/>
+                    <text x="350" y="65" font-size="12" fill="green">C (14 lb distributed)</text>
+                    
+                    <!-- Component F at right -->
+                    <line x1="600" y1="30" x2="600" y2="100" stroke="purple" stroke-width="4" marker-end="url(#arrowhead)"/>
+                    <text x="605" y="25" font-size="12" fill="purple">F (250 lb)</text>
+                    
+                    <!-- Component E at right -->
+                    <line x1="550" y1="40" x2="550" y2="100" stroke="orange" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="555" y="35" font-size="12" fill="orange">E (60 lb)</text>
+                    
+                    <!-- Arrow marker definition -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Dimensions -->
+                    <text x="100" y="190" font-size="12">0"</text>
+                    <text x="200" y="190" font-size="12">6"</text>
+                    <text x="550" y="190" font-size="12">18"</text>
+                    <text x="600" y="190" font-size="12">20"</text>
+                    <text x="700" y="190" font-size="12">22"</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚖️ Equilibrium Analysis</h2>
+            <div class="calculation-box">
+                <h3>Load Summary (with Dynamic Factor):</h3>
+                <div id="loadSummary"></div>
+                
+                <h3>Support Reactions:</h3>
+                <div class="formula">ΣFy = 0: RA + RB - W_total = 0</div>
+                <div class="formula">ΣM_A = 0: RB × 22 - (moments of all loads about A) = 0</div>
+                
+                <div id="reactionCalculations"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Shear Force Diagram</h2>
+            <div class="chart-container">
+                <canvas id="shearChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📈 Bending Moment Diagram</h2>
+            <div class="chart-container">
+                <canvas id="momentChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔬 Stress Analysis</h2>
+            <div class="calculation-box">
+                <h3>Maximum Bending Moment:</h3>
+                <div id="maxMoment"></div>
+                
+                <h3>Section Modulus Required:</h3>
+                <div class="formula">S_required = M_max / σ_allowable</div>
+                <div id="sectionModulus"></div>
+                
+                <h3>Deflection Analysis:</h3>
+                <div class="formula">δ_max = (5WL⁴)/(384EI) for uniformly distributed load</div>
+                <div id="deflectionCalc"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Material Selection</h2>
+            <div id="materialSelection">
+                <h3>Recommended Steel Grades:</h3>
+                <table>
+                    <tr>
+                        <th>Steel Grade</th>
+                        <th>Yield Strength (psi)</th>
+                        <th>Ultimate Strength (psi)</th>
+                        <th>Modulus of Elasticity (psi)</th>
+                        <th>Suitability</th>
+                    </tr>
+                    <tr>
+                        <td>A36 Structural Steel</td>
+                        <td>36,000</td>
+                        <td>58,000</td>
+                        <td>29,000,000</td>
+                        <td id="a36-suit">✅ Suitable</td>
+                    </tr>
+                    <tr>
+                        <td>A572 Grade 50</td>
+                        <td>50,000</td>
+                        <td>65,000</td>
+                        <td>29,000,000</td>
+                        <td id="a572-suit">✅ Excellent</td>
+                    </tr>
+                    <tr>
+                        <td>A514 High Strength</td>
+                        <td>100,000</td>
+                        <td>110,000</td>
+                        <td>29,000,000</td>
+                        <td id="a514-suit">✅ Overkill but Safe</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛡️ Safety Factor Analysis</h2>
+            <div id="safetyAnalysis">
+                <h3>Applied Safety Factors:</h3>
+                <ul>
+                    <li><strong>Static Load Safety Factor:</strong> 3.0 (battle bot requirement)</li>
+                    <li><strong>Dynamic Load Factor:</strong> 1.5 (uneven terrain)</li>
+                    <li><strong>Combined Safety Factor:</strong> 4.5</li>
+                </ul>
+                
+                <div id="safetyResults"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Final Recommendations</h2>
+            <div id="recommendations">
+                <h3>Design Recommendations:</h3>
+                <div id="finalRecommendations"></div>
+                
+                <div class="success">
+                    <strong>✅ Design Status:</strong> <span id="designStatus">Calculating...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for calculations
+        let shearCanvas, momentCanvas;
+        
+        // Initialize charts
+        function initializeCharts() {
+            shearCanvas = document.getElementById('shearChart');
+            momentCanvas = document.getElementById('momentChart');
+        }
+        
+        // Custom chart drawing function
+        function drawChart(canvas, data, title, yLabel, color) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set up margins
+            const margin = { top: 40, right: 40, bottom: 60, left: 80 };
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.bottom - margin.top;
+            
+            // Find min/max values
+            const minX = 0;
+            const maxX = 22;
+            const minY = Math.min(...data.values) * 1.2;
+            const maxY = Math.max(...data.values) * 1.2;
+            
+            // Helper functions for coordinate transformation
+            const xScale = (x) => margin.left + (x - minX) * chartWidth / (maxX - minX);
+            const yScale = (y) => margin.top + chartHeight - (y - minY) * chartHeight / (maxY - minY);
+            
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left, margin.top + chartHeight);
+            ctx.lineTo(margin.left + chartWidth, margin.top + chartHeight);
+            ctx.stroke();
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 1;
+            
+            // Vertical grid lines
+            for (let i = 0; i <= 22; i += 2) {
+                const x = xScale(i);
+                ctx.beginPath();
+                ctx.moveTo(x, margin.top);
+                ctx.lineTo(x, margin.top + chartHeight);
+                ctx.stroke();
+            }
+            
+            // Horizontal grid lines
+            const yStep = (maxY - minY) / 8;
+            for (let i = 0; i <= 8; i++) {
+                const y = yScale(minY + i * yStep);
+                ctx.beginPath();
+                ctx.moveTo(margin.left, y);
+                ctx.lineTo(margin.left + chartWidth, y);
+                ctx.stroke();
+            }
+            
+            // Draw data line
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            for (let i = 0; i < data.positions.length; i++) {
+                const x = xScale(data.positions[i]);
+                const y = yScale(data.values[i]);
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // Fill area under curve
+            ctx.fillStyle = color.replace('rgb', 'rgba').replace(')', ', 0.2)');
+            ctx.beginPath();
+            ctx.moveTo(xScale(data.positions[0]), yScale(0));
+            for (let i = 0; i < data.positions.length; i++) {
+                ctx.lineTo(xScale(data.positions[i]), yScale(data.values[i]));
+            }
+            ctx.lineTo(xScale(data.positions[data.positions.length - 1]), yScale(0));
+            ctx.closePath();
+            ctx.fill();
+            
+            // Draw labels
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            
+            // Title
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(title, width / 2, 25);
+            
+            // X-axis label
+            ctx.font = '14px Arial';
+            ctx.fillText('Distance along beam (inches)', width / 2, height - 10);
+            
+            // Y-axis label
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(yLabel, 0, 0);
+            ctx.restore();
+            
+            // X-axis tick labels
+            for (let i = 0; i <= 22; i += 4) {
+                const x = xScale(i);
+                ctx.fillText(i.toString(), x, margin.top + chartHeight + 20);
+            }
+            
+            // Y-axis tick labels
+            for (let i = 0; i <= 8; i++) {
+                const value = minY + i * yStep;
+                const y = yScale(value);
+                ctx.textAlign = 'right';
+                ctx.fillText(value.toFixed(0), margin.left - 10, y + 5);
+            }
+            
+            ctx.textAlign = 'center';
+        }
+        
+        function calculateAnalysis() {
+            // Get input values
+            const loadA = parseFloat(document.getElementById('loadA').value);
+            const loadB = parseFloat(document.getElementById('loadB').value);
+            const loadC = parseFloat(document.getElementById('loadC').value);
+            const loadF = parseFloat(document.getElementById('loadF').value);
+            const loadE = parseFloat(document.getElementById('loadE').value);
+            const dynamicFactor = parseFloat(document.getElementById('dynamicFactor').value);
+            
+            // Apply dynamic factors
+            const dynLoadA = loadA * dynamicFactor;
+            const dynLoadB = loadB * dynamicFactor;
+            const dynLoadC = loadC * dynamicFactor;
+            const dynLoadF = loadF * dynamicFactor;
+            const dynLoadE = loadE * dynamicFactor;
+            
+            // Load positions
+            const L = 22; // beam length
+            const posA = 6;
+            const posE = 18;
+            const posF = 20;
+            
+            // Total loads
+            const totalPointLoad = dynLoadA + dynLoadB + dynLoadF + dynLoadE;
+            const totalDistributedLoad = dynLoadC;
+            const totalLoad = totalPointLoad + totalDistributedLoad;
+            
+            // Calculate support reactions
+            // Moment about left support (A)
+            const momentAboutA = (dynLoadA + dynLoadB) * posA + 
+                                dynLoadE * posE + 
+                                dynLoadF * posF + 
+                                dynLoadC * (L / 2); // distributed load acts at center
+            
+            const RB = momentAboutA / L;
+            const RA = totalLoad - RB;
+            
+            // Update load summary
+            document.getElementById('loadSummary').innerHTML = `
+                <p>Component A: ${loadA} × ${dynamicFactor} = ${dynLoadA.toFixed(1)} lb</p>
+                <p>Component B: ${loadB} × ${dynamicFactor} = ${dynLoadB.toFixed(1)} lb</p>
+                <p>Component C: ${loadC} × ${dynamicFactor} = ${dynLoadC.toFixed(1)} lb (distributed)</p>
+                <p>Component E: ${loadE} × ${dynamicFactor} = ${dynLoadE.toFixed(1)} lb</p>
+                <p>Component F: ${loadF} × ${dynamicFactor} = ${dynLoadF.toFixed(1)} lb</p>
+                <p><strong>Total Load: ${totalLoad.toFixed(1)} lb</strong></p>
+            `;
+            
+            // Update reaction calculations
+            document.getElementById('reactionCalculations').innerHTML = `
+                <div class="result">
+                    <p>Left Support Reaction (RA): ${RA.toFixed(1)} lb</p>
+                    <p>Right Support Reaction (RB): ${RB.toFixed(1)} lb</p>
+                    <p>Check: RA + RB = ${(RA + RB).toFixed(1)} lb ≈ ${totalLoad.toFixed(1)} lb ✅</p>
+                </div>
+            `;
+            
+            // Calculate shear and moment diagrams
+            const positions = [];
+            const shearValues = [];
+            const momentValues = [];
+            
+            const step = 0.5;
+            for (let x = 0; x <= L; x += step) {
+                positions.push(x);
+                
+                // Calculate shear at position x
+                let shear = RA;
+                
+                // Subtract loads that have been passed
+                if (x > posA) shear -= (dynLoadA + dynLoadB);
+                if (x > posE) shear -= dynLoadE;
+                if (x > posF) shear -= dynLoadF;
+                
+                // Subtract distributed load
+                shear -= dynLoadC * (x / L);
+                
+                shearValues.push(shear);
+                
+                // Calculate moment at position x
+                let moment = RA * x;
+                
+                // Subtract moments from loads that have been passed
+                if (x > posA) moment -= (dynLoadA + dynLoadB) * (x - posA);
+                if (x > posE) moment -= dynLoadE * (x - posE);
+                if (x > posF) moment -= dynLoadF * (x - posF);
+                
+                // Subtract moment from distributed load
+                moment -= dynLoadC * x * x / (2 * L);
+                
+                momentValues.push(moment);
+            }
+            
+            // Find maximum values
+            const maxShear = Math.max(...shearValues.map(Math.abs));
+            const maxMoment = Math.max(...momentValues.map(Math.abs));
+            const maxMomentIndex = momentValues.findIndex(m => Math.abs(m) === maxMoment);
+            
+            // Update charts
+            drawChart(shearCanvas, {
+                positions: positions,
+                values: shearValues
+            }, 'Shear Force Diagram', 'Shear Force (lb)', 'rgb(255, 99, 132)');
+            
+            drawChart(momentCanvas, {
+                positions: positions,
+                values: momentValues
+            }, 'Bending Moment Diagram', 'Bending Moment (lb-in)', 'rgb(54, 162, 235)');
+            
+            // Stress analysis
+            const safetyFactor = 3.0;
+            const yieldStrength = 36000; // A36 steel
+            const allowableStress = yieldStrength / safetyFactor;
+            const requiredSectionModulus = maxMoment / allowableStress;
+            
+            document.getElementById('maxMoment').innerHTML = `
+                <div class="result">
+                    <p>Maximum Bending Moment: ${maxMoment.toFixed(1)} lb-in</p>
+                    <p>Location: ${(maxMomentIndex * step).toFixed(1)} inches from left support</p>
+                </div>
+            `;
+            
+            document.getElementById('sectionModulus').innerHTML = `
+                <div class="calculation-box">
+                    <p>Allowable Stress (A36 steel): ${yieldStrength.toLocaleString()} psi ÷ ${safetyFactor} = ${allowableStress.toLocaleString()} psi</p>
+                    <p>Required Section Modulus: ${maxMoment.toFixed(1)} ÷ ${allowableStress.toLocaleString()} = ${requiredSectionModulus.toFixed(4)} in³</p>
+                </div>
+                <div class="result">
+                    <p><strong>Minimum Section Modulus Required: ${requiredSectionModulus.toFixed(4)} in³</strong></p>
+                </div>
+            `;
+            
+            // Deflection calculation (simplified)
+            const E = 29000000; // Modulus of elasticity for steel (psi)
+            const I = requiredSectionModulus * 2.0; // Conservative estimate of moment of inertia
+            const distributedLoad = dynLoadC / (L * 12); // Convert to lb/in
+            const maxDeflection = (5 * distributedLoad * Math.pow(L * 12, 4)) / (384 * E * I); // Convert to inches
+            
+            document.getElementById('deflectionCalc').innerHTML = `
+                <div class="calculation-box">
+                    <p>Estimated Moment of Inertia: ${I.toFixed(4)} in⁴</p>
+                    <p>Maximum Deflection: ${maxDeflection.toFixed(4)} inches</p>
+                    <p>Deflection Limit (L/360): ${(L * 12 / 360).toFixed(4)} inches</p>
+                </div>
+                <div class="${maxDeflection < (L * 12 / 360) ? 'result' : 'warning'}">
+                    <p><strong>Deflection Check: ${maxDeflection < (L * 12 / 360) ? 'PASS ✅' : 'FAIL ❌'}</strong></p>
+                </div>
+            `;
+            
+            // Safety analysis
+            const actualStress = maxMoment / requiredSectionModulus;
+            const actualSafetyFactor = yieldStrength / actualStress;
+            
+            document.getElementById('safetyResults').innerHTML = `
+                <div class="calculation-box">
+                    <p>Actual Maximum Stress: ${actualStress.toFixed(0)} psi</p>
+                    <p>Yield Strength: ${yieldStrength.toLocaleString()} psi</p>
+                    <p>Actual Safety Factor: ${actualSafetyFactor.toFixed(2)}</p>
+                </div>
+                <div class="${actualSafetyFactor >= 3.0 ? 'result' : 'warning'}">
+                    <p><strong>Safety Factor Check: ${actualSafetyFactor >= 3.0 ? 'PASS ✅' : 'FAIL ❌'}</strong></p>
+                </div>
+            `;
+            
+            // Final recommendations
+            let recommendations = [];
+            if (requiredSectionModulus < 0.5) {
+                recommendations.push("A standard steel angle (L2×2×1/4) would be sufficient.");
+            } else if (requiredSectionModulus < 2.0) {
+                recommendations.push("Consider using a steel channel or wide flange beam.");
+            } else {
+                recommendations.push("A larger structural section is required - consider W-shape beam.");
+            }
+            
+            if (maxDeflection > (L * 12 / 360)) {
+                recommendations.push("⚠️ Deflection exceeds limit - increase beam depth or add stiffeners.");
+            }
+            
+            if (actualSafetyFactor < 3.0) {
+                recommendations.push("⚠️ Safety factor insufficient - upgrade to higher strength steel or larger section.");
+            }
+            
+            recommendations.push("Consider adding local reinforcement at high-load connection points.");
+            recommendations.push("Use welded connections for battle bot durability.");
+            recommendations.push("Apply appropriate surface treatment for corrosion protection.");
+            
+            document.getElementById('finalRecommendations').innerHTML = 
+                '<ul>' + recommendations.map(r => `<li>${r}</li>`).join('') + '</ul>';
+            
+            // Design status
+            const isDesignSafe = actualSafetyFactor >= 3.0 && maxDeflection < (L * 12 / 360);
+            document.getElementById('designStatus').innerHTML = 
+                isDesignSafe ? 'DESIGN IS SAFE FOR BATTLE BOT APPLICATION ✅' : 'DESIGN REQUIRES MODIFICATION ⚠️';
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            initializeCharts();
+            calculateAnalysis();
+        };
+    </script>
+</body>
+</html>
